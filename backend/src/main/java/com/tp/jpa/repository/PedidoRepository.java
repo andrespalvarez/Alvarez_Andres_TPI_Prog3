@@ -1,8 +1,10 @@
 package com.tp.jpa.repository;
 
 import com.tp.jpa.model.Pedido;
+import com.tp.jpa.model.Producto;
 import com.tp.jpa.model.enums.EstadoPedido;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -24,8 +26,17 @@ public class PedidoRepository extends BaseRepository<Pedido> {
     /**
      * Retorna los pedidos activos que coinciden con el estado indicado.
      */
+    // Consulta JPQL: retorna todos los pedidos activos con un estado específico
+    // Útil para filtrar PENDIENTE, CONFIRMADO, TERMINADO o CANCELADO
     public List<Pedido> buscarPorEstado(EstadoPedido estadoPedido) {
-        // TODO: implementar
-        throw new UnsupportedOperationException("Método no implementado aún");
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT p FROM Pedido p WHERE p.estado = :estado AND p.eliminado = false";
+            List<Pedido> q = em.createQuery(jpql, Pedido.class).setParameter("estado", estadoPedido).getResultList();
+            return q;
+        } finally {
+            em.close();
+        }
     }
 }
+
