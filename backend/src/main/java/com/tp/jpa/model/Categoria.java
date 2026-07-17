@@ -25,14 +25,30 @@ public class Categoria extends Base {
     @Column(name = "descripcion", length = 500)
     private String descripcion;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id")
     @Builder.Default
     private Set<Producto> productos = new HashSet<>();
 
-    public void addProducto(Producto producto) {
+/*     public void addProducto(Producto producto) {
         if (!productos.add(producto)) {
             throw new IllegalArgumentException("Producto ya cargado en la categoría");
         }
+    } */
+
+    public void addProducto(Producto p) {
+        if (p == null) {
+            return;
+        }
+        if (!productos.contains(p)) {
+            productos.add(p);
+            p.setCategoria(this);
+        }
     }
+
+    public void removeProducto(Producto p) {
+        productos.remove(p);
+    }
+
+
 }

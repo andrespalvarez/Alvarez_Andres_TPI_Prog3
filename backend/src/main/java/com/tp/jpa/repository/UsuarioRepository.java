@@ -41,10 +41,6 @@ public class UsuarioRepository extends BaseRepository<Usuario> {
         }
     }
 
-    
-
-
-
     /**
      * Retorna los pedidos activos del usuario indicado.
      */
